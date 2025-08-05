@@ -46,7 +46,7 @@ function CalculoValorTotal() {
   let total = 0;
   for (const cor in boisPorCor) {
     boisPorCor[cor].forEach((boi) => {
-      total += boi.peso * valorPorKg;
+      total += (boi.peso/2) * valorPorKg;
     });
   }
   document.querySelector(

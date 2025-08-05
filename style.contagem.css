@@ -208,4 +208,9 @@ body{
     border-radius: 10px;
     font-size: 10pt;
   }
+
+  .valor_total_receber{
+    margin-left: 5px;
+    font-family: Arial, Helvetica, sans-serif;
+  }
 }

@@ -97,7 +97,7 @@ body{
 
 /*CELULAR 576px*/
 
-@media (max-width: 390px){
+@media (max-width: 410px){
   .contagem{
     height: 90px;
     width: 90%;

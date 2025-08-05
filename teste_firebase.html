@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Teste Firebase</title>
+</head>
+<body>
+  <h1>Teste Firebase Firestore</h1>
+  <button id="btnSalvar">Salvar dado de teste</button>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCuryZes4w8OTkIZGRpn6QYkcbAqXyB7Xk",
+      authDomain: "fazenda-redencao-647ea.firebaseapp.com",
+      projectId: "fazenda-redencao-647ea",
+      storageBucket: "fazenda-redencao-647ea.appspot.com",
+      messagingSenderId: "413754208549",
+      appId: "1:413754208549:web:a8fa28e55bd1cba2a7aacc"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    document.getElementById("btnSalvar").addEventListener("click", async () => {
+      try {
+        await addDoc(collection(db, "contagens"), {
+          nome: "Teste",
+          data: new Date().toLocaleDateString(),
+          bois: { "Amarelo": [{ num: "001", peso: 450, cor: "Amarelo" }] }
+        });
+        alert("Dado salvo no Firestore!");
+      } catch (e) {
+        console.error("Erro ao salvar:", e);
+      }
+    });
+  </script>
+</body>
+</html>

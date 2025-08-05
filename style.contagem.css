@@ -1,0 +1,211 @@
+body{
+  background-color: #FAF0CA;
+}
+
+#title{
+    display: flex;
+    justify-content: center;
+}
+
+
+.container_calcEfilter {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 500px;
+  margin: auto;
+  margin-top: 20px;
+}
+
+.lista-bois {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.boi-item {
+  border: 2px solid #4c4a4a;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.container_info{
+    display: flex;
+    justify-content: center;
+}
+
+.colum{
+  display: flex;
+  flex-direction: column;
+}
+
+.container_btn_home{
+    display: flex;
+    justify-content: end;
+}
+
+#btn_home img{
+    width: 40px;
+}
+
+.botoes-cor{
+  display: flex;
+  margin-left: -30px;
+}
+
+.botoes-cor input {
+  background-color: #eee;
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  margin: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  width: 80px;
+}
+
+.botoes-cor input.selecionado {
+  outline: 1px solid rgb(255, 255, 255); /* contorno forte */
+  box-shadow: 0 0 3px 2px rgba(52, 43, 43, 0.577); /* sombra escura */
+  transform: scale(1.05); /* leve aumento visual */
+}
+
+
+#btn_preto{
+  background-color: black;
+  color: white;
+}
+
+#btn_vermelho{
+  background-color: red;
+    color: white;
+
+}
+
+#btn_verde{
+  background-color: green;
+    color: white;
+
+}
+
+#btn_laranja{
+  background-color: #FE7F2D;
+    color: white;
+
+}
+
+#btn_branco{
+  background-color: white;
+  color: #212223;
+}
+
+#btn_azul{
+  background-color: rgb(3, 192, 244);
+}
+
+#btn_amarelo{
+  background-color: yellow;
+}
+
+#btn_amarelo {
+  background-color: yellow;
+}
+
+#btn_add_animal{
+  width: 360px;
+  margin-top: 10px;
+  background-color: #FFE6B4;
+  height: 30px;
+  border-radius: 15px;
+}
+
+#valor_kg{
+  height: 25px;
+  border-radius: 4px;
+}
+
+#btn_calculo{
+  height: 33px;
+  border-radius: 15px;
+  background-color: #FFE6B4;
+}
+
+#label_filter{
+  font-size: 13pt;
+}
+
+#filter_color{
+  height: 25px;
+  border-radius: 5px;
+}
+
+.salvar-contagem{
+  margin-left: 20px;
+}
+
+/*CELULAR 576px*/
+
+@media (max-width: 390px){
+  
+
+  #peso , #num{
+    height: 30px;
+    margin-bottom: 20px;
+    margin: 3px;
+    border-radius: 10px;
+  }
+
+  .colum input{
+    height: 45px;
+    width: 80px;
+    border-radius: 10px;
+    font-size: 11pt;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .btn-cor{
+    width: 20px;
+  }
+
+  .botoes-cor label{
+    display: none;
+  }
+
+  .botoes-cor{
+    margin-left: 5px;
+  }
+
+  .salvar-contagem{
+    margin-left: 5px;
+    margin-bottom: 15px;
+  }
+
+  #valor_kg{
+    width: 120px;
+    margin-right: 5px;
+    border-radius: 10px;
+  }
+
+  .container_calcEfilter{
+    display: flex;
+  }
+
+
+  #info_valor{
+    display: flex;
+    justify-content: center;
+  }
+
+  #filter_color{
+    width: 130px;
+    height: 30px;
+    font-size: 11pt;
+  }
+
+  #btn_calcular{
+    border-radius: 10px;
+    font-size: 10pt;
+  }
+}

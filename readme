@@ -1,0 +1,32 @@
+## FAZENDA REDENÇÃO - CONTAGEM DE GADO
+
+📌 O que é:
+Aplicativo para contagem e registro de gado com sincronização via Firebase Firestore.
+Todas as contagens salvas são compartilhadas entre todos que utilizarem este app.
+
+---
+
+📱 COMO USAR NO CELULAR:
+
+1. Baixe a pasta completa para o celular.
+2. Descompacte (se necessário).
+3. Abra a pasta e localize o arquivo "inicio_cont.html".
+4. Toque e abra no navegador Chrome.
+5. No menu do Chrome, escolha "Adicionar à tela inicial" para funcionar como aplicativo.
+6. É necessário ter internet para salvar e carregar as contagens.
+
+---
+
+💻 COMO USAR NO COMPUTADOR:
+
+1. Baixe a pasta completa.
+2. Abra a pasta e dê dois cliques no arquivo "inicio_cont.html".
+3. O aplicativo abrirá no seu navegador padrão.
+4. É necessário estar conectado à internet.
+
+---
+
+⚠️ IMPORTANTE:
+
+- Não altere os arquivos de configuração do Firebase para garantir que todos acessem o mesmo banco de dados.
+- Todos que tiverem este app verão as mesmas contagens, e alterações feitas por um usuário refletem para todos.

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Detalhes</title>
+  <link rel="stylesheet" href="style.details.css">
+</head>
+<body>
+  <a href="historico.html" class="btn-voltar"><img src="img_fazenda/Seta-branca.png" alt=""></a>
+  <h1 id="titulo-contagem">Detalhes da Contagem</h1>
+  <div id="conteudo"></div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCuryZes4w8OTkIZGRpn6QYkcbAqXyB7Xk",
+      authDomain: "fazenda-redencao-647ea.firebaseapp.com",
+      projectId: "fazenda-redencao-647ea",
+      storageBucket: "fazenda-redencao-647ea.appspot.com",
+      messagingSenderId: "413754208549",
+      appId: "1:413754208549:web:a8fa28e55bd1cba2a7aacc"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+
+    async function carregar() {
+      if (!id) {
+        document.getElementById("conteudo").innerHTML = "<p>Contagem não encontrada.</p>";
+        return;
+      }
+
+      const docRef = doc(db, "contagens", id);
+      const docSnap = await getDoc(docRef);
+
+      if (!docSnap.exists()) {
+        document.getElementById("conteudo").innerHTML = "<p>Contagem não encontrada.</p>";
+        return;
+      }
+
+      const c = docSnap.data();
+
+      // Atualiza título
+      document.getElementById("titulo-contagem").textContent = c.nome;
+
+      let html = `<div class="info-geral">Data: ${c.data}</div>`;
+
+      for (const cor in c.bois) {
+        html += `<div class="grupo-cor"><strong>Cor: ${cor}</strong>`;
+        c.bois[cor].forEach(boi => {
+          const pesoValido = (boi.peso / 2).toFixed(2);
+          html += `<div class="boi-item">${boi.num} — ${boi.peso}kg — Peso Válido: ${pesoValido}kg</div>`;
+        });
+        html += `</div>`;
+      }
+
+      document.getElementById("conteudo").innerHTML = html;
+    }
+
+    carregar();
+  </script>
+</body>
+</html>

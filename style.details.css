@@ -1,0 +1,60 @@
+@font-face {
+  font-family: Dolce;
+  src: url("Dolce\ Vita.ttf") format(truetype);
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #14213d; /* bege */
+  margin: 20px;
+  color: #ccc;
+}
+
+h1 {
+  text-align: center;
+  font-family: "Dolce";
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.info-geral {
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.grupo-cor {
+  border: 2px solid #FCA311;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 15px;
+}
+
+.grupo-cor strong {
+  font-size: 18px;
+  
+}
+
+.boi-item {
+  margin-top: 5px;
+  padding: 4px 0;
+
+}
+
+.boi-item:last-child {
+  border-bottom: none;
+}
+
+.btn-voltar img {
+  width: 45px;
+  margin-top: -10px;
+}
+
+@media (max-width: 390px){
+  h1{
+    font-size: 28pt;
+  }
+
+}

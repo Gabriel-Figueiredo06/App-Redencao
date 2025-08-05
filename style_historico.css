@@ -1,0 +1,113 @@
+@font-face {
+  font-family: Dolce;
+  src: url("Dolce\ Vita.ttf") format(truetype);
+  font-weight: normal;
+  font-style: normal;
+}
+
+*{
+    padding: 0;
+    margin: 0;
+}
+
+body{
+    background-color: #14213d;
+    color: #e8f1f7;
+}
+
+#title{
+    font-size: 20pt;
+    font-family: "Dolce";
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+}
+
+#back{
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+#back a{
+    font-size: 14pt;
+}
+
+#back img{
+    width: 40px;
+}
+
+.msg-vazia{
+    font-family: "Dolci";
+    font-size: 15pt;
+    display: flex;
+    justify-content: center;
+}
+
+.nome_contagem{
+    font-size: 18pt;
+    font-family: "Dolce";
+    letter-spacing: 2px;
+    
+}
+
+.contagem{
+    padding: 10px;
+    width: 97%;
+    height: 70px;
+    margin-left: 10px;
+    border-radius: 7px;
+    border: 2px solid #FCA311;
+    margin-bottom: 15px;
+}
+
+.data_contagem{
+  font-family: "Dolce";
+}
+
+.btn-detalhes {
+  background-color: #f9a51fe6; /* Dourado*/
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  margin-right: 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-detalhes:hover {
+  background-color: #ff9d00; /* verde mais escuro */
+}
+
+.btn-remover {
+  background-color: #e8f1f7; /* vermelho */
+  color: rgb(0, 0, 0);
+  border: none;
+  padding: 8px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-remover:hover {
+  background-color: #a2a6a8; /* vermelho mais escuro */
+}
+
+
+/*CELULAR 576px*/
+
+@media (max-width: 390px){
+  .contagem{
+    height: 90px;
+    width: 90%;
+  }
+
+  .btn-detalhes{
+    margin-top: 10px;
+  }
+
+  .data_contagem{
+    font-size: 13pt;
+  }
+}

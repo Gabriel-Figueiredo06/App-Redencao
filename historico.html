@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Histórico</title>
+    <link rel="stylesheet" href="style_historico.css" />
+  </head>
+  <body>
+    <div id="back">
+      <a href="inicio_cont.html"
+        ><img src="img_fazenda/Seta-branca.png" alt=""
+      /></a>
+    </div>
+    <div id="title">
+      <h1>Histórico</h1>
+    </div>
+    
+    <div id="historico_container"></div>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+      import {
+        getFirestore,
+        collection,
+        getDocs,
+        deleteDoc,
+        doc,
+      } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyCuryZes4w8OTkIZGRpn6QYkcbAqXyB7Xk",
+        authDomain: "fazenda-redencao-647ea.firebaseapp.com",
+        projectId: "fazenda-redencao-647ea",
+        storageBucket: "fazenda-redencao-647ea.appspot.com",
+        messagingSenderId: "413754208549",
+        appId: "1:413754208549:web:a8fa28e55bd1cba2a7aacc",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+      const container = document.getElementById("historico_container");
+
+      async function carregar() {
+        const querySnapshot = await getDocs(collection(db, "contagens"));
+        if (querySnapshot.empty) {
+          container.innerHTML =
+            '<p class="msg-vazia">--Nenhuma contagem salva--</p>';
+          return;
+        }
+
+        querySnapshot.forEach((docSnap) => {
+          const c = docSnap.data();
+          const div = document.createElement("div");
+          div.className = "contagem";
+          div.innerHTML = `
+          <strong class="nome_contagem">${c.nome}</strong><br>
+          <span class="data_contagem">Data: ${c.data}</span>
+         <div class="btns">
+  <a href="detalhes.html?id=${docSnap.id}">
+    <button class="btn-detalhes">Ver Detalhes</button>
+  </a>
+  <button class="btn-remover" onclick="remover('${docSnap.id}')">Excluir</button>
+</div>
+
+        `;
+          container.appendChild(div);
+        });
+      }
+
+      async function remover(id) {
+        if (confirm("Remover contagem?")) {
+          await deleteDoc(doc(db, "contagens", id));
+          location.reload();
+        }
+      }
+
+      window.remover = remover;
+      carregar();
+    </script>
+  </body>
+</html>

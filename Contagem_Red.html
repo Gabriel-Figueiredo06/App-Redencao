@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Fazenda-Redenção</title>
+    <link rel="stylesheet" href="style.contagem.css" />
+    <script src="script_Contagem.js" defer></script>
+  </head>
+  <body>
+    <div class="container_btn_home">
+      <a id="btn_home" href="inicio_cont.html">
+        <img src="img_fazenda/Home2.png" alt="" />
+      </a>
+    </div>
+
+    <div id="title">
+      <h1>Contagem de gado</h1>
+    </div>
+
+    <div class="salvar-contagem">
+      <button onclick="salvarContagem()">SALVAR CONTAGEM</button>
+    </div>
+
+    <main>
+      <div class="container_info">
+        <div class="info">
+          <input
+            type="number"
+            name="peso"
+            id="peso"
+            min="0"
+            placeholder="Peso"
+          />
+          <input
+            type="text"
+            id="num"
+            name="num"
+            placeholder="Número"
+            oninput="this.value = this.value.toUpperCase()"
+          />
+
+          <!-- Botões de cor -->
+          <div class="botoes-cor">
+            <label>Cor:</label>
+            <div class="colum">
+              <input
+                id="btn_amarelo"
+                class="btn-cor"
+                type="button"
+                value="Amarelo"
+                onclick="selecionarCor(this)"
+              />
+              <input
+                id="btn_azul"
+                class="btn-cor"
+                type="button"
+                value="Azul"
+                onclick="selecionarCor(this)"
+              />
+            </div>
+            <div class="colum">
+              <input
+                id="btn_branco"
+                class="btn-cor"
+                type="button"
+                value="Branco"
+                onclick="selecionarCor(this)"
+              />
+              <input
+                id="btn_laranja"
+                class="btn-cor"
+                type="button"
+                value="Laranja"
+                onclick="selecionarCor(this)"
+              />
+            </div>
+            <div class="colum">
+              <input
+                id="btn_preto"
+                class="btn-cor"
+                type="button"
+                value="Preto"
+                onclick="selecionarCor(this)"
+              />
+              <input
+                id="btn_verde"
+                class="btn-cor"
+                type="button"
+                value="Verde"
+                onclick="selecionarCor(this)"
+              />
+            </div>
+            <div class="colum">
+              <input
+                id="btn_vermelho"
+                class="btn-cor"
+                type="button"
+                value="Vermelho"
+                onclick="selecionarCor(this)"
+              />
+              <input type="button" value="S/B" onclick="selecionarCor(this)" />
+            </div>
+          </div>
+
+          <input
+            id="btn_add_animal"
+            type="button"
+            value="Adicionar"
+            onclick="Adicionar_animal()"
+          />
+        </div>
+      </div>
+
+      <div class="container_calcEfilter">
+        <div id="info_valor">
+          <input type="number" id="valor_kg" placeholder="Preço por Kg (R$)" />
+        <button id="btn_calcular" onclick="CalculoValorTotal()">Calcular Valor</button>
+        <div class="valor_total_receber"></div>
+        </div>
+        
+
+        <select id="filter_color">
+          <option value="Todos">Filtrar por cor</option>
+          <option value="Amarelo">Amarelo</option>
+          <option value="Azul">Azul</option>
+          <option value="Branco">Branco</option>
+          <option value="Laranja">Laranja</option>
+          <option value="Preto">Preto</option>
+          <option value="Verde">Verde</option>
+          <option value="Vermelho">Vermelho</option>
+        </select>
+
+        <div class="total_bois"></div>
+        <div class="peso_tot"></div>
+        <div class="lista-bois"></div>
+      </div>
+    </main>
+
+    <!-- Firebase -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+      import {
+        getFirestore,
+        collection,
+        addDoc,
+      } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyCuryZes4w8OTkIZGRpn6QYkcbAqXyB7Xk",
+        authDomain: "fazenda-redencao-647ea.firebaseapp.com",
+        projectId: "fazenda-redencao-647ea",
+        storageBucket: "fazenda-redencao-647ea.appspot.com",
+        messagingSenderId: "413754208549",
+        appId: "1:413754208549:web:a8fa28e55bd1cba2a7aacc",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      window.salvarContagem = async function () {
+        if (Object.keys(boisPorCor).length === 0) {
+          alert("Nenhum boi foi adicionado.");
+          return;
+        }
+
+        const nome = prompt("Digite o nome da contagem:");
+        if (!nome) return;
+
+        const data =
+          prompt("Digite a data (ex: 05/08/2025)") ||
+          new Date().toLocaleDateString();
+
+        try {
+          await addDoc(collection(db, "contagens"), {
+            nome,
+            data,
+            bois: boisPorCor,
+          });
+          alert("Contagem salva!");
+          boisPorCor = {};
+          renderizarBois();
+          atualizarTotalBois();
+        } catch (e) {
+          console.error("Erro:", e);
+        }
+      };
+    </script>
+  </body>
+</html>

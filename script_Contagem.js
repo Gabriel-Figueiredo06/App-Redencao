@@ -2,6 +2,25 @@
 let boisPorCor = {};
 let corSelecionada = "Amarelo"; // Cor padrão
 
+// =======================
+// Salvar e restaurar progresso
+// =======================
+function salvarProgressoLocal() {
+  localStorage.setItem("contagemAtual", JSON.stringify(boisPorCor));
+}
+
+function restaurarProgressoLocal() {
+  const salvo = localStorage.getItem("contagemAtual");
+  if (salvo) {
+    boisPorCor = JSON.parse(salvo);
+    renderizarBois();
+    atualizarTotalBois();
+  }
+}
+
+// =======================
+// Seleção de cor
+// =======================
 function selecionarCor(botao) {
   const cor = botao.value;
   atualizarCorSelecionada(cor);
@@ -17,36 +36,62 @@ function atualizarCorSelecionada(cor) {
   });
 }
 
+// =======================
+// Adicionar boi
+// =======================
 function Adicionar_animal() {
   const pesoInput = document.getElementById("peso");
   const numInput = document.getElementById("num");
+  const obsInput = document.getElementById("obs");
+
   const peso = parseFloat(pesoInput.value);
   const num = numInput.value.toUpperCase();
+  const obs = obsInput.value;
   const cor = corSelecionada;
 
-  if (!peso || !num || !cor) {
+  // Peso obrigatório
+  if (!peso || !cor) {
     alert("Preencha todos os campos corretamente.");
     return;
   }
 
-  const novoBoi = { peso, num, cor };
+  // Número obrigatório exceto para S/B
+  if (cor !== "S/B" && !num) {
+    alert("Digite o número do boi.");
+    return;
+  }
+
+  // Cria objeto do boi
+  const novoBoi = {
+    peso,
+    num: num || "S/B",
+    cor,
+    obs
+  };
+
   if (!boisPorCor[cor]) boisPorCor[cor] = [];
   boisPorCor[cor].push(novoBoi);
 
+  // Limpa campos
   pesoInput.value = "";
   numInput.value = "";
+  obsInput.value = "";
 
   renderizarBois();
   atualizarTotalBois();
+  salvarProgressoLocal(); // salva o progresso
 }
 
+// =======================
+// Calcular valor total
+// =======================
 function CalculoValorTotal() {
   const valorPorKg = parseFloat(document.getElementById("valor_kg").value);
   if (!valorPorKg) return;
   let total = 0;
   for (const cor in boisPorCor) {
     boisPorCor[cor].forEach((boi) => {
-      total += (boi.peso/2) * valorPorKg;
+      total += (boi.peso / 2) * valorPorKg;
     });
   }
   document.querySelector(
@@ -54,6 +99,9 @@ function CalculoValorTotal() {
   ).innerText = `Valor total: R$ ${total.toFixed(2)}`;
 }
 
+// =======================
+// Renderizar lista
+// =======================
 function renderizarBois() {
   const lista = document.querySelector(".lista-bois");
   lista.innerHTML = "";
@@ -68,11 +116,12 @@ function renderizarBois() {
       const pesoValido = (boi.peso / 2).toFixed(2);
 
       div.innerHTML = `
-  <strong>${boi.num}</strong> - ${boi.peso}kg - ${boi.cor} - 
-  <span>Peso válido: ${pesoValido}kg</span>
-  <button onclick="editarBoi(this, '${boi.num}', '${boi.cor}')">Editar</button>
-  <button onclick="removerBoi('${boi.num}', '${boi.cor}')">Remover</button>
-`;
+        <strong>${boi.num}</strong> - ${boi.peso}kg - ${boi.cor} - 
+        <span>Peso válido: ${pesoValido}kg</span> - 
+        <span>Observação: ${boi.obs || "Nenhuma"}</span>
+        <button onclick="editarBoi(this, '${boi.num}', '${boi.cor}')">Editar</button>
+        <button onclick="removerBoi('${boi.num}', '${boi.cor}')">Remover</button>
+      `;
 
       lista.appendChild(div);
       pesoTotal += boi.peso;
@@ -94,12 +143,19 @@ function renderizarBois() {
   atualizarTotalBois();
 }
 
+// =======================
+// Remover boi
+// =======================
 function removerBoi(numero, cor) {
   boisPorCor[cor] = boisPorCor[cor].filter((boi) => boi.num !== numero);
   renderizarBois();
   atualizarTotalBois();
+  salvarProgressoLocal(); // salva o progresso
 }
 
+// =======================
+// Editar boi
+// =======================
 function editarBoi(botao, numero, cor) {
   const div = botao.parentElement;
   const boi = boisPorCor[cor].find((b) => b.num === numero);
@@ -107,6 +163,7 @@ function editarBoi(botao, numero, cor) {
   div.innerHTML = `
     <input type="text" class="edit-num" value="${boi.num}" />
     <input type="number" class="edit-peso" value="${boi.peso}" />
+    <input type="text" class="edit-obs" value="${boi.obs || ""}" placeholder="Observação" />
     <select class="edit-cor">
       <option ${boi.cor === "Amarelo" ? "selected" : ""}>Amarelo</option>
       <option ${boi.cor === "Azul" ? "selected" : ""}>Azul</option>
@@ -116,10 +173,9 @@ function editarBoi(botao, numero, cor) {
       <option ${boi.cor === "Rosa" ? "selected" : ""}>Rosa</option>
       <option ${boi.cor === "Verde" ? "selected" : ""}>Verde</option>
       <option ${boi.cor === "Vermelho" ? "selected" : ""}>Vermelho</option>
+      <option ${boi.cor === "S/B" ? "selected" : ""}>S/B</option>
     </select>
-    <button onclick="salvarEdicao(this, '${boi.num}', '${
-    boi.cor
-  }')">Salvar</button>
+    <button onclick="salvarEdicao(this, '${boi.num}', '${boi.cor}')">Salvar</button>
     <button onclick="renderizarBois()">Cancelar</button>
   `;
 }
@@ -129,6 +185,7 @@ function salvarEdicao(botao, numeroAntigo, corAntiga) {
 
   const novoNumero = div.querySelector(".edit-num").value.toUpperCase();
   const novoPeso = parseFloat(div.querySelector(".edit-peso").value);
+  const novaObs = div.querySelector(".edit-obs").value;
   const novaCor = div.querySelector(".edit-cor").value;
 
   if (!boisPorCor[corAntiga]) return;
@@ -138,8 +195,9 @@ function salvarEdicao(botao, numeroAntigo, corAntiga) {
   if (index === -1) return;
 
   const boi = boisPorCor[corAntiga].splice(index, 1)[0];
-  boi.num = novoNumero;
+  boi.num = novoNumero || "S/B";
   boi.peso = novoPeso;
+  boi.obs = novaObs;
   boi.cor = novaCor;
 
   if (!boisPorCor[novaCor]) boisPorCor[novaCor] = [];
@@ -147,8 +205,12 @@ function salvarEdicao(botao, numeroAntigo, corAntiga) {
 
   renderizarBois();
   atualizarTotalBois();
+  salvarProgressoLocal(); // salva o progresso
 }
 
+// =======================
+// Atualizar total
+// =======================
 function atualizarTotalBois() {
   let total = 0;
   for (const cor in boisPorCor) {
@@ -160,17 +222,21 @@ function atualizarTotalBois() {
   }
 }
 
-// Iniciar cor selecionada e renderizar
+// =======================
+// Inicialização
+// =======================
 window.onload = () => {
   atualizarCorSelecionada(corSelecionada);
-  renderizarBois();
+  restaurarProgressoLocal(); // restaura progresso salvo
 
-  // Ativar filtro por cor
   document.getElementById("filter_color").addEventListener("change", () => {
     renderizarBois();
   });
 };
 
+// =======================
+// Salvar contagem final
+// =======================
 function salvarContagem() {
   if (Object.keys(boisPorCor).length === 0) {
     alert("Nenhum boi foi adicionado para salvar.");
@@ -180,7 +246,7 @@ function salvarContagem() {
   const nome = prompt("Digite o nome da contagem:");
   if (!nome) return;
 
-  const data = prompt("Digite a data da contagem (ex: 05/08/2025):") || new Date().toLocaleDateString();
+  const data = prompt("Digite a data da contagem (ex: 05/08/2025)") || new Date().toLocaleDateString();
 
   const historico = JSON.parse(localStorage.getItem("historicoContagens")) || [];
 
@@ -191,10 +257,10 @@ function salvarContagem() {
   });
 
   localStorage.setItem("historicoContagens", JSON.stringify(historico));
+  localStorage.removeItem("contagemAtual"); // limpa progresso
 
   alert("Contagem salva com sucesso!");
 
-  // Limpar a contagem atual após salvar
   boisPorCor = {};
   renderizarBois();
   atualizarTotalBois();

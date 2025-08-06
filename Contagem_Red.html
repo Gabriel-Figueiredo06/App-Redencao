@@ -33,15 +33,19 @@
             name="peso"
             id="peso"
             min="0"
+            autocomplete="off"
             placeholder="Peso"
           />
           <input
-            type="text"
+            type="number"
             id="num"
             name="num"
             placeholder="Número"
+            autocomplete="off"
             oninput="this.value = this.value.toUpperCase()"
           />
+
+          <input type="text" id="obs" name="obs" placeholder="Observação" autocomplete="off" />
 
           <!-- Botões de cor -->
           <div class="botoes-cor">
@@ -118,10 +122,11 @@
       <div class="container_calcEfilter">
         <div id="info_valor">
           <input type="number" id="valor_kg" placeholder="Preço por Kg (R$)" />
-        <button id="btn_calcular" onclick="CalculoValorTotal()">Calcular Valor</button>
-        <div class="valor_total_receber"></div>
+          <button id="btn_calcular" onclick="CalculoValorTotal()">
+            Calcular Valor
+          </button>
+          <div class="valor_total_receber"></div>
         </div>
-        
 
         <select id="filter_color">
           <option value="Todos">Filtrar por cor</option>

@@ -8,7 +8,7 @@
     />
     <title>Fazenda-Redenção</title>
     <link rel="stylesheet" href="style.contagem.css" />
-    <script src="script_Contagem.js" defer></script>
+    <script type="module" src="script_Contagem.js" defer></script>
   </head>
   <body>
     <div class="container_btn_home">
@@ -144,55 +144,5 @@
         <div class="lista-bois"></div>
       </div>
     </main>
-
-    <!-- Firebase -->
-    <script type="module">
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-      import {
-        getFirestore,
-        collection,
-        addDoc,
-      } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
-
-      const firebaseConfig = {
-        apiKey: "AIzaSyCuryZes4w8OTkIZGRpn6QYkcbAqXyB7Xk",
-        authDomain: "fazenda-redencao-647ea.firebaseapp.com",
-        projectId: "fazenda-redencao-647ea",
-        storageBucket: "fazenda-redencao-647ea.appspot.com",
-        messagingSenderId: "413754208549",
-        appId: "1:413754208549:web:a8fa28e55bd1cba2a7aacc",
-      };
-
-      const app = initializeApp(firebaseConfig);
-      const db = getFirestore(app);
-
-      window.salvarContagem = async function () {
-        if (Object.keys(boisPorCor).length === 0) {
-          alert("Nenhum boi foi adicionado.");
-          return;
-        }
-
-        const nome = prompt("Digite o nome da contagem:");
-        if (!nome) return;
-
-        const data =
-          prompt("Digite a data (ex: 05/08/2025)") ||
-          new Date().toLocaleDateString();
-
-        try {
-          await addDoc(collection(db, "contagens"), {
-            nome,
-            data,
-            bois: boisPorCor,
-          });
-          alert("Contagem salva!");
-          boisPorCor = {};
-          renderizarBois();
-          atualizarTotalBois();
-        } catch (e) {
-          console.error("Erro:", e);
-        }
-      };
-    </script>
   </body>
 </html>

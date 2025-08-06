@@ -21,10 +21,6 @@
       <h1>Contagem de gado</h1>
     </div>
 
-    <div class="salvar-contagem">
-      <button onclick="salvarContagem()">SALVAR CONTAGEM</button>
-    </div>
-
     <main>
       <div class="container_info">
         <div class="info">
@@ -45,7 +41,13 @@
             oninput="this.value = this.value.toUpperCase()"
           />
 
-          <input type="text" id="obs" name="obs" placeholder="Observação" autocomplete="off" />
+          <input
+            type="text"
+            id="obs"
+            name="obs"
+            placeholder="Observação"
+            autocomplete="off"
+          />
 
           <!-- Botões de cor -->
           <div class="botoes-cor">
@@ -138,6 +140,10 @@
           <option value="Verde">Verde</option>
           <option value="Vermelho">Vermelho</option>
         </select>
+
+        <div class="salvar-contagem">
+          <button onclick="salvarContagem()">SALVAR CONTAGEM</button>
+        </div>
 
         <div class="total_bois"></div>
         <div class="peso_tot"></div>

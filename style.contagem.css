@@ -178,12 +178,20 @@ body{
   }
 
   .salvar-contagem{
+    width: 160px;
     margin-left: 5px;
     margin-bottom: 15px;
+    position: absolute;
+    top: 426px;
+    right: 25px;
+  }
+
+  .salvar-contagem button{
+    height: 27px;
   }
 
   #valor_kg{
-    width: 120px;
+    width: 162px;
     margin-right: 5px;
     border-radius: 10px;
   }
@@ -195,22 +203,38 @@ body{
 
   #info_valor{
     display: flex;
+    flex-direction: column;
     justify-content: center;
+    width: 200px;
+
   }
 
   #filter_color{
-    width: 130px;
+    width: 180px;
     height: 30px;
     font-size: 11pt;
+    position: absolute;
+    top: 385px;
+    right: 20px;
   }
 
   #btn_calcular{
+    width: 170px;
+    height: 30px;
     border-radius: 10px;
     font-size: 10pt;
+    margin-top: 10px;
   }
 
   .valor_total_receber{
     margin-left: 5px;
     font-family: Arial, Helvetica, sans-serif;
+  }
+
+  #obs{
+    height: 30px;
+    width: 173px;
+    border-radius: 10px;
+    margin-top: 5px;
   }
 }

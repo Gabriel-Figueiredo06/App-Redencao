@@ -236,7 +236,7 @@ body {
 }
 /*CELULAR 576px*/
 
-@media (max-width: 400px) {
+@media (max-width: 440px) {
   #peso,
   #num {
     height: 30px;

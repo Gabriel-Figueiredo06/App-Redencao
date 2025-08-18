@@ -72,7 +72,7 @@ body {
   border: 1px solid #ccc;
   margin-top: 4px;
   background: linear-gradient(30deg, #ffb34a, #eab872);
-  font-family: "Nexa";
+  font-family: "";
 }
 
 .container_info {
@@ -236,13 +236,14 @@ body {
 }
 /*CELULAR 576px*/
 
-@media (max-width: 410px) {
+@media (max-width: 400px) {
   #peso,
   #num {
     height: 30px;
     margin-bottom: 20px;
     margin: 3px;
     border-radius: 10px;
+    width: 175px;
   }
 
   .colum input {
@@ -325,7 +326,6 @@ body {
     height: 30px;
     margin-top: 20px;
     margin-left: 5px;
-    border: 2px solid #ff9d00;
     border-radius: 5px;
     font-family: Arial, Helvetica, sans-serif;
     display: flex;

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
   <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
@@ -51,7 +51,6 @@
 
           <!-- Botões de cor -->
           <div class="botoes-cor">
-            <label>Cor:</label>
             <div class="colum">
               <input
                 id="btn_amarelo"
@@ -109,15 +108,21 @@
                 onclick="selecionarCor(this)"
               />
               <input type="button" value="S/B" onclick="selecionarCor(this)" />
+
+              
             </div>
+            
           </div>
 
-          <input
+          <div id="container_btn_add">
+            <input
             id="btn_add_animal"
             type="button"
             value="Adicionar"
             onclick="Adicionar_animal()"
           />
+          </div>
+          
         </div>
       </div>
 
@@ -142,7 +147,7 @@
         </select>
 
         <div class="salvar-contagem">
-          <button onclick="salvarContagem()">SALVAR CONTAGEM</button>
+          <button onclick="salvarContagem()">Salvar contagem</button>
         </div>
 
         <div class="total_bois"></div>

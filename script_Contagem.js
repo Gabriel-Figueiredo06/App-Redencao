@@ -50,6 +50,9 @@ function selecionarCor(botao) {
   });
 }
 
+// torne acessível ao onclick do HTML
+window.selecionarCor = selecionarCor;
+
 // =======================
 // Adicionar boi
 // =======================

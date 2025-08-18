@@ -1,12 +1,38 @@
-body{
-  background-color: #FAF0CA;
+@font-face {
+  font-family: Dolce;
+  src: url("Dolce\ Vita.ttf") format(truetype);
+  font-weight: normal;
+  font-style: normal;
 }
 
-#title{
-    display: flex;
-    justify-content: center;
+@font-face {
+  font-family: Nexa;
+  src: url("Nexa-Trial-Book.ttf") format(truetype);
+  font-weight: normal;
+  font-style: normal;
 }
 
+/* Chrome, Safari, Edge, Opera */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input:focus {
+  outline: none;
+}
+body {
+  background-color: #14213d;
+}
+
+#title {
+  display: flex;
+  justify-content: center;
+  color: white;
+  font-family: "Dolce";
+  letter-spacing: 1px;
+}
 
 .container_calcEfilter {
   display: flex;
@@ -17,145 +43,205 @@ body{
   margin-top: 20px;
 }
 
+#info_valor {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.valor_total_receber {
+  margin-top: 7px;
+}
+
 .lista-bois {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
+/*MOSTRADOR DOS BOIS =========================================================*/
 .boi-item {
-  border: 2px solid #4c4a4a;
+  border: 1px solid #ff9d00;
+  color: white;
   padding: 10px;
   border-radius: 8px;
 }
 
-.container_info{
-    display: flex;
-    justify-content: center;
+.boi-item button{
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  margin-top: 4px;
+  background: linear-gradient(30deg, #ffb34a,#eab872 );
 }
 
-.colum{
+.container_info {
+  display: flex;
+  justify-content: center;
+}
+
+.info input[type="number"],
+.info input[type="text"] {
+  height: 30px;
+  border-radius: 10px 5px;
+  background-color: #14213d;
+  border: 2px solid #ff9d00;
+  color: white;
+}
+
+.colum {
   display: flex;
   flex-direction: column;
 }
 
-.container_btn_home{
-    display: flex;
-    justify-content: end;
-}
-
-#btn_home img{
-    width: 40px;
-}
-
-.botoes-cor{
+.container_btn_home {
   display: flex;
-  margin-left: -30px;
+  justify-content: end;
+}
+
+#btn_home img {
+  width: 40px;
+}
+
+.botoes-cor {
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+
+#container_btn_add {
+  display: flex;
+  justify-content: center;
 }
 
 .botoes-cor input {
-  background-color: #eee;
-  border: 1px solid #ccc;
+  width: 80px;
   padding: 8px 12px;
   margin: 5px;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.2s;
-  width: 80px;
+  border: 1px solid #ff9d00;
+  font-family: "Nexa";
+  font-size: 10pt;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .botoes-cor input.selecionado {
-  outline: 1px solid rgb(255, 255, 255); /* contorno forte */
-  box-shadow: 0 0 3px 2px rgba(52, 43, 43, 0.577); /* sombra escura */
+  outline: 1px solid #ffc15c87; /* contorno forte */
+  box-shadow: 0 0 0px 2px #ffc870; /* sombra escura */
   transform: scale(1.05); /* leve aumento visual */
 }
 
-
-#btn_preto{
-  background-color: black;
+#btn_preto {
+  background: linear-gradient(34deg, #232526, #555658);
   color: white;
 }
 
-#btn_vermelho{
-  background-color: red;
-    color: white;
-
+#btn_vermelho {
+  background: linear-gradient(34deg, #f76267, #b70c06);
+  color: white;
+  font-size: 9pt;
 }
 
-#btn_verde{
-  background-color: green;
-    color: white;
-
+#btn_verde {
+  background: linear-gradient(34deg, #dce35b, #49cf4d, #45b649);
+  color: white;
 }
 
-#btn_laranja{
-  background-color: #FE7F2D;
-    color: white;
-
+#btn_laranja {
+  background: linear-gradient(34deg, #ffb34a, #f57004);
+  color: white;
 }
 
-#btn_branco{
-  background-color: white;
+#btn_branco {
+  background: linear-gradient(34deg, rgb(170, 170, 170), white);
   color: #212223;
 }
 
-#btn_azul{
-  background-color: rgb(3, 192, 244);
-}
-
-#btn_amarelo{
-  background-color: yellow;
+#btn_azul {
+  background: linear-gradient(34deg, #004e92, #0e176a);
+  color: white;
 }
 
 #btn_amarelo {
-  background-color: yellow;
+  background: linear-gradient(34deg, #f09819, #edde5d);
 }
 
-#btn_add_animal{
+#btn_add_animal {
   width: 360px;
   margin-top: 10px;
-  background-color: #FFE6B4;
+  background: linear-gradient(178deg, #fec25b, #ff9d00, #8a5807);
   height: 30px;
   border-radius: 15px;
+  font-family: "Nexa";
+  font-size: 11pt;
 }
 
-#valor_kg{
+#valor_kg {
   height: 25px;
-  border-radius: 4px;
+  border-radius: 10px;
 }
 
-#btn_calculo{
+#btn_calcular {
   height: 33px;
-  border-radius: 15px;
-  background-color: #FFE6B4;
+  width: 120px;
+  border-radius: 10px;
+  background: linear-gradient(175deg, #fec25b, #ff9d00, #8a5807);
+  color: white;
+  border: 1px solid #ff9d00;
+  font-family: "Nexa";
+  font-size: 10pt;
 }
 
-#label_filter{
+#label_filter {
   font-size: 13pt;
 }
 
-#filter_color{
+#filter_color {
   height: 25px;
   border-radius: 5px;
 }
 
-.salvar-contagem{
-  margin-left: 20px;
+.valor_total_receber {
+  color: white;
 }
 
+.salvar-contagem {
+  display: flex;
+  justify-content: center;
+  margin-left: 20px;
+  
+}
+
+.salvar-contagem button {
+  height: 25px;
+  background: linear-gradient(175deg, #fec25b, #ff9d00);
+  border-radius: 7px;
+  border: 2px solid #ff9d00;
+  font-family: "Nexa";
+  font-size: 10pt;
+}
+
+.total_bois,
+.peso_tot {
+  color: white;
+  font-family: "Nexa";
+  font-size: 10pt;
+}
 /*CELULAR 576px*/
 
-@media (max-width: 410px){
-  
-
-  #peso , #num{
+@media (max-width: 410px) {
+  #peso,
+  #num {
     height: 30px;
     margin-bottom: 20px;
     margin: 3px;
     border-radius: 10px;
   }
 
-  .colum input{
+  .colum input {
     height: 45px;
     width: 80px;
     border-radius: 10px;
@@ -165,19 +251,19 @@ body{
     align-items: center;
   }
 
-  .btn-cor{
+  .btn-cor {
     width: 20px;
   }
 
-  .botoes-cor label{
+  .botoes-cor label {
     display: none;
   }
 
-  .botoes-cor{
+  .botoes-cor {
     margin-left: 5px;
   }
 
-  .salvar-contagem{
+  .salvar-contagem {
     width: 160px;
     margin-left: 5px;
     margin-bottom: 15px;
@@ -186,30 +272,28 @@ body{
     right: 25px;
   }
 
-  .salvar-contagem button{
+  .salvar-contagem button {
     height: 27px;
   }
 
-  #valor_kg{
+  #valor_kg {
     width: 162px;
     margin-right: 5px;
     border-radius: 10px;
   }
 
-  .container_calcEfilter{
+  .container_calcEfilter {
     display: flex;
   }
 
-
-  #info_valor{
+  #info_valor {
     display: flex;
     flex-direction: column;
     justify-content: center;
     width: 200px;
-
   }
 
-  #filter_color{
+  #filter_color {
     width: 180px;
     height: 30px;
     font-size: 11pt;
@@ -218,7 +302,7 @@ body{
     right: 20px;
   }
 
-  #btn_calcular{
+  #btn_calcular {
     width: 170px;
     height: 30px;
     border-radius: 10px;
@@ -226,12 +310,12 @@ body{
     margin-top: 10px;
   }
 
-  .valor_total_receber{
+  .valor_total_receber {
     margin-left: 5px;
     font-family: Arial, Helvetica, sans-serif;
   }
 
-  #obs{
+  #obs {
     height: 30px;
     width: 173px;
     border-radius: 10px;

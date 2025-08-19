@@ -1,13 +1,13 @@
 @font-face {
   font-family: Tobago;
-  src: url("TobagoPoster.ttf") format(truetype);
+  src: url("TobagoPoster.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: Rose;
-  src: url("RedRose-Regular.ttf") format(truetype);
+  src: url("RedRose-Regular.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }

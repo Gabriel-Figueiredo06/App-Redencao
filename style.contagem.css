@@ -1,20 +1,20 @@
 @font-face {
-  font-family: Dolce;
-  src: url("Dolce\ Vita.ttf") format(truetype);
+  font-family: "Dolce";
+  src: url("Dolce Vita.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: Nexa;
-  src: url("Nexa-Trial-Book.ttf") format(truetype);
+  font-family: "Nexa";
+  src: url("Nexa-Trial-Book.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: Rose;
-  src: url("RedRose-Regular.ttf") format(truetype);
+  font-family: "Rose";
+  src: url("RedRose-Regular.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }

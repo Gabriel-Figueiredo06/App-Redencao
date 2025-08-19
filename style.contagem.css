@@ -1,5 +1,5 @@
 @font-face {
-  font-family: "Toboga";
+  font-family: "Tobago";
   src: url("TobagoPoster.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
@@ -36,7 +36,7 @@ body {
   display: flex;
   justify-content: center;
   color: white;
-  font-family: "Toboga";
+  font-family: "Tobago";
   font-weight: lighter;
   letter-spacing: 1px;
 }

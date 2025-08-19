@@ -1,12 +1,12 @@
 @font-face {
-  font-family: Tobago;
+  font-family: "Tobago";
   src: url("TobagoPoster.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: Rose;
+  font-family: "Rose";
   src: url("RedRose-Regular.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
@@ -24,10 +24,11 @@ body{
 
 #title{
     font-size: 20pt;
-    font-family: "Dolce";
+    font-family: "Tobago";
     display: flex;
     justify-content: center;
     margin-bottom: 10px;
+    letter-spacing: 1px;
 }
 
 #back{

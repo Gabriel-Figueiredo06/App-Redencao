@@ -12,6 +12,13 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: Rose;
+  src: url("RedRose-Regular.ttf") format(truetype);
+  font-weight: normal;
+  font-style: normal;
+}
+
 /* Chrome, Safari, Edge, Opera */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
@@ -64,7 +71,7 @@ body {
   color: white;
   padding: 10px;
   border-radius: 8px;
-  font-family: "Nexa";
+  font-family: "Rose";
 }
 
 .boi-item button {
@@ -72,7 +79,8 @@ body {
   border: 1px solid #ccc;
   margin-top: 4px;
   background: linear-gradient(30deg, #ffb34a, #eab872);
-  font-family: "";
+  font-family: "Rose";
+  font-size: 9pt;
 }
 
 .container_info {
@@ -228,11 +236,15 @@ body {
   color: rgb(255, 254, 254);
 }
 
-.total_bois,
-.peso_tot {
+.total_bois {
   color: white;
-  font-family: "Nexa";
-  font-size: 10pt;
+  font-family: "Rose";
+  font-size: 11pt;
+}
+
+.peso_tot{
+  color: white;
+  font-family: "Rose";
 }
 /*CELULAR 576px*/
 
@@ -340,4 +352,8 @@ body {
     margin-top: 5px;
     margin-left: 5px;
   }
+
+  #btn_amarelo {
+    font-size: 10pt;
+}
 }

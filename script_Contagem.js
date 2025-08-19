@@ -124,9 +124,9 @@ function renderizarBois() {
       const div = document.createElement("div");
       div.className = "boi-item";
       div.innerHTML = `
-        <strong>${boi.num}</strong> - ${boi.peso}kg - ${boi.cor} - 
+        <strong>Nº ${boi.num}</strong> - ${boi.peso}kg - Cor: ${boi.cor} - 
         <span>Peso válido: ${pesoValido}kg</span> - 
-        <span>Observação: ${boi.obs || "Nenhuma"}</span>
+        <span><br> Observação: ${boi.obs || "Nenhuma"}</span>
         <button onclick="editarBoi(this, '${boi.num}', '${boi.cor}')">Editar</button>
         <button onclick="removerBoi('${boi.num}', '${boi.cor}')">Remover</button>
       `;

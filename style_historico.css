@@ -1,6 +1,13 @@
 @font-face {
-  font-family: Dolce;
-  src: url("Dolce\ Vita.ttf") format(truetype);
+  font-family: Tobago;
+  src: url("TobagoPoster.ttf") format(truetype);
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Rose;
+  src: url("RedRose-Regular.ttf") format(truetype);
   font-weight: normal;
   font-style: normal;
 }
@@ -21,7 +28,6 @@ body{
     display: flex;
     justify-content: center;
     margin-bottom: 10px;
-    letter-spacing: 2px;
 }
 
 #back{
@@ -38,7 +44,7 @@ body{
 }
 
 .msg-vazia{
-    font-family: "Dolci";
+    font-family: "Rose";
     font-size: 15pt;
     display: flex;
     justify-content: center;
@@ -46,15 +52,13 @@ body{
 
 .nome_contagem{
     font-size: 18pt;
-    font-family: "Dolce";
-    letter-spacing: 2px;
-    
+    font-family: "Toboga";    
 }
 
 .contagem{
     padding: 10px;
     width: 97%;
-    height: 70px;
+    height: auto;
     margin-left: 10px;
     border-radius: 7px;
     border: 2px solid #FCA311;
@@ -62,7 +66,7 @@ body{
 }
 
 .data_contagem{
-  font-family: "Dolce";
+  font-family: "Rose";
 }
 
 .btn-detalhes {
@@ -71,6 +75,7 @@ body{
   border: none;
   padding: 8px 14px;
   margin-right: 8px;
+  margin-top: 10px;
   border-radius: 5px;
   cursor: pointer;
   font-size: 14px;
@@ -100,7 +105,7 @@ body{
 @media (max-width: 410px){
   .contagem{
     height: auto;
-    width: 90%;
+    width: 85%;
   }
 
   .btn-detalhes{

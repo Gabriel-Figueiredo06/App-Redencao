@@ -1,6 +1,8 @@
 // Firebase setup
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+// NOVO: Importar as funções de autenticação
+import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCuryZes4w8OTkIZGRpn6QYkcbAqXyB7Xk",
@@ -13,6 +15,30 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+// NOVO: Inicializar o serviço de autenticação
+const auth = getAuth(app);
+
+// NOVO: Função para autenticar o usuário anonimamente
+function autenticarUsuario() {
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // Usuário já está logado (anônimamente)
+      console.log("Usuário autenticado com UID:", user.uid);
+      // Você pode habilitar os botões de salvar aqui se quiser
+    } else {
+      // Usuário não está logado, vamos logá-lo anonimamente
+      signInAnonymously(auth)
+        .then(() => {
+          console.log("Login anônimo realizado com sucesso!");
+        })
+        .catch((error) => {
+          console.error("Erro na autenticação anônima:", error);
+          alert("Não foi possível conectar ao banco de dados. Verifique sua conexão e tente recarregar a página.");
+        });
+    }
+  });
+}
+
 
 // =======================
 // Dados da contagem
@@ -235,8 +261,13 @@ window.salvarContagem = async function () {
 // Inicialização
 // =======================
 window.onload = () => {
-  atualizarCorSelecionada(corSelecionada);
-  restaurarProgressoLocal();
+  // NOVO: Chamar a função de autenticação assim que a página carregar
+  autenticarUsuario(); 
 
+  // O resto da sua função continua igual
+  restaurarProgressoLocal();
   document.getElementById("filter_color").addEventListener("change", renderizarBois);
+  
+  // A linha abaixo não é mais necessária, pois a cor já é selecionada por padrão
+  // atualizarCorSelecionada(corSelecionada); 
 };

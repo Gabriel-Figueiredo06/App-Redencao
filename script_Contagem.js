@@ -1,44 +1,60 @@
-// Firebase setup
+// =======================
+// Firebase Setup
+// =======================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
-// NOVO: Importar as funções de autenticação
-import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+import {
+  getAuth,
+  signInAnonymously,
+  onAuthStateChanged,
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCuryZes4w8OTkIZGRpn6QYkcbAqXyB7Xk",
+  apiKey: "AIzaSyCuryZes4w00TkIZGRpn6QYkcbAqXyB7Xk", // 🔥 substitua por sua nova API Key válida
   authDomain: "fazenda-redencao-647ea.firebaseapp.com",
   projectId: "fazenda-redencao-647ea",
   storageBucket: "fazenda-redencao-647ea.appspot.com",
   messagingSenderId: "413754208549",
-  appId: "1:413754208549:web:a8fa28e55bd1cba2a7aacc"
+  appId: "1:413754208549:web:a8fa28e55bd1cba2a7aacc",
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-// NOVO: Inicializar o serviço de autenticação
 const auth = getAuth(app);
 
-// NOVO: Função para autenticar o usuário anonimamente
-function autenticarUsuario() {
+// =======================
+// Autenticação Anônima
+// =======================
+let authReady = new Promise((resolve, reject) => {
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      // Usuário já está logado (anônimamente)
-      console.log("Usuário autenticado com UID:", user.uid);
-      // Você pode habilitar os botões de salvar aqui se quiser
+      console.log("✅ Usuário autenticado:", user.uid);
+      resolve(user);
     } else {
-      // Usuário não está logado, vamos logá-lo anonimamente
+      console.log("🔄 Tentando login anônimo...");
       signInAnonymously(auth)
-        .then(() => {
-          console.log("Login anônimo realizado com sucesso!");
+        .then((result) => {
+          console.log("✅ Login anônimo realizado:", result.user.uid);
+          resolve(result.user);
         })
         .catch((error) => {
-          console.error("Erro na autenticação anônima:", error);
-          alert("Não foi possível conectar ao banco de dados. Verifique sua conexão e tente recarregar a página.");
+          console.error("❌ Erro ao autenticar:", error);
+          alert(
+            "Não foi possível autenticar no Firebase.\nVerifique se o login ANÔNIMO está habilitado e se o domínio está autorizado no Firebase."
+          );
+          reject(error);
         });
     }
   });
-}
+});
 
+authReady
+  .then(() => console.log("🔥 Autenticação pronta"))
+  .catch((err) => console.error("Erro no authReady:", err));
 
 // =======================
 // Dados da contagem
@@ -47,7 +63,7 @@ let boisPorCor = {};
 let corSelecionada = "Amarelo";
 
 // =======================
-// Progresso local
+// Progresso Local
 // =======================
 function salvarProgressoLocal() {
   localStorage.setItem("contagemAtual", JSON.stringify(boisPorCor));
@@ -66,17 +82,12 @@ function restaurarProgressoLocal() {
 // Seleção de cor
 // =======================
 function selecionarCor(botao) {
-  const cor = botao.value;
-  corSelecionada = cor;
+  corSelecionada = botao.value;
   document.querySelectorAll(".btn-cor").forEach((btn) => {
     btn.classList.remove("selecionado");
-    if (btn.value === corSelecionada) {
-      btn.classList.add("selecionado");
-    }
+    if (btn.value === corSelecionada) btn.classList.add("selecionado");
   });
 }
-
-// torne acessível ao onclick do HTML
 window.selecionarCor = selecionarCor;
 
 // =======================
@@ -101,7 +112,7 @@ window.Adicionar_animal = function () {
     peso,
     num: num || "S/B",
     cor: corSelecionada,
-    obs
+    obs,
   };
 
   if (!boisPorCor[corSelecionada]) boisPorCor[corSelecionada] = [];
@@ -117,7 +128,7 @@ window.Adicionar_animal = function () {
 };
 
 // =======================
-// Calcular valor total
+// Calcular Valor Total
 // =======================
 window.CalculoValorTotal = function () {
   const valorPorKg = parseFloat(document.getElementById("valor_kg").value);
@@ -130,11 +141,13 @@ window.CalculoValorTotal = function () {
     });
   }
 
-  document.querySelector(".valor_total_receber").innerText = `Valor total: R$ ${total.toFixed(2)}`;
+  document.querySelector(
+    ".valor_total_receber"
+  ).innerText = `Valor total: R$ ${total.toFixed(2)}`;
 };
 
 // =======================
-// Renderizar bois
+// Renderizar Bois
 // =======================
 function renderizarBois() {
   const lista = document.querySelector(".lista-bois");
@@ -151,24 +164,34 @@ function renderizarBois() {
       div.className = "boi-item";
       div.innerHTML = `
         <strong>Nº ${boi.num}</strong> - ${boi.peso}kg - Cor: ${boi.cor} - 
-        <span>Peso válido: ${pesoValido}kg</span> - 
-        <span><br> Observação: ${boi.obs || "Nenhuma"}</span>
-        <button onclick="editarBoi(this, '${boi.num}', '${boi.cor}')">Editar</button>
-        <button onclick="removerBoi('${boi.num}', '${boi.cor}')">Remover</button>
+        <span>Peso válido: ${pesoValido}kg</span><br>
+        <span>Observação: ${boi.obs || "Nenhuma"}</span>
+        <button onclick="editarBoi(this, '${boi.num}', '${
+        boi.cor
+      }')">Editar</button>
+        <button onclick="removerBoi('${boi.num}', '${
+        boi.cor
+      }')">Remover</button>
       `;
       lista.appendChild(div);
       pesoTotal += boi.peso;
     });
   }
 
-  const totalBois = Object.values(boisPorCor).flat().filter(b => corFiltro === "Todos" || b.cor === corFiltro);
+  const totalBois = Object.values(boisPorCor)
+    .flat()
+    .filter((b) => corFiltro === "Todos" || b.cor === corFiltro);
   const pesoMedio = totalBois.length ? pesoTotal / totalBois.length : 0;
 
-  document.querySelector(".peso_tot").innerText = `Peso total: ${pesoTotal.toFixed(2)} kg — Peso médio: ${pesoMedio.toFixed(2)} kg`;
+  document.querySelector(
+    ".peso_tot"
+  ).innerText = `Peso total: ${pesoTotal.toFixed(
+    2
+  )} kg — Peso médio: ${pesoMedio.toFixed(2)} kg`;
 }
 
 // =======================
-// Editar
+// Editar / Salvar / Remover
 // =======================
 window.editarBoi = function (botao, numero, cor) {
   const div = botao.parentElement;
@@ -176,13 +199,27 @@ window.editarBoi = function (botao, numero, cor) {
   div.innerHTML = `
     <input type="text" class="edit-num" value="${boi.num}" />
     <input type="number" class="edit-peso" value="${boi.peso}" />
-    <input type="text" class="edit-obs" value="${boi.obs || ""}" placeholder="Observação" />
+    <input type="text" class="edit-obs" value="${
+      boi.obs || ""
+    }" placeholder="Observação" />
     <select class="edit-cor">
-      ${["Amarelo","Azul","Branco","Laranja","Preto","Rosa","Verde","Vermelho","S/B"]
-        .map(c => `<option ${boi.cor === c ? "selected" : ""}>${c}</option>`)
+      ${[
+        "Amarelo",
+        "Azul",
+        "Branco",
+        "Laranja",
+        "Preto",
+        "Rosa",
+        "Verde",
+        "Vermelho",
+        "S/B",
+      ]
+        .map((c) => `<option ${boi.cor === c ? "selected" : ""}>${c}</option>`)
         .join("")}
     </select>
-    <button onclick="salvarEdicao(this, '${boi.num}', '${boi.cor}')">Salvar</button>
+    <button onclick="salvarEdicao(this, '${boi.num}', '${
+    boi.cor
+  }')">Salvar</button>
     <button onclick="renderizarBois()">Cancelar</button>
   `;
 };
@@ -194,7 +231,7 @@ window.salvarEdicao = function (botao, numeroAntigo, corAntiga) {
   const novaObs = div.querySelector(".edit-obs").value;
   const novaCor = div.querySelector(".edit-cor").value;
 
-  const index = boisPorCor[corAntiga].findIndex(b => b.num === numeroAntigo);
+  const index = boisPorCor[corAntiga].findIndex((b) => b.num === numeroAntigo);
   if (index === -1) return;
 
   const boi = boisPorCor[corAntiga].splice(index, 1)[0];
@@ -211,28 +248,26 @@ window.salvarEdicao = function (botao, numeroAntigo, corAntiga) {
   salvarProgressoLocal();
 };
 
-// =======================
-// Remover
-// =======================
 window.removerBoi = function (numero, cor) {
-  boisPorCor[cor] = boisPorCor[cor].filter(b => b.num !== numero);
+  boisPorCor[cor] = boisPorCor[cor].filter((b) => b.num !== numero);
   renderizarBois();
   atualizarTotalBois();
   salvarProgressoLocal();
 };
 
 // =======================
-// Total
+// Total e Salvamento
 // =======================
 function atualizarTotalBois() {
-  const total = Object.values(boisPorCor).reduce((sum, arr) => sum + arr.length, 0);
+  const total = Object.values(boisPorCor).reduce(
+    (sum, arr) => sum + arr.length,
+    0
+  );
   document.querySelector(".total_bois").innerText = `Total de bois: ${total}`;
 }
 
-// =======================
-// Salvar contagem final no Firebase
-// =======================
 window.salvarContagem = async function () {
+  await authReady; // ✅ Garante que está autenticado
   if (Object.keys(boisPorCor).length === 0) {
     alert("Nenhum boi foi adicionado para salvar.");
     return;
@@ -241,19 +276,20 @@ window.salvarContagem = async function () {
   const nome = prompt("Digite o nome da contagem:");
   if (!nome) return;
 
-  const data = prompt("Digite a data da contagem (ex: 05/08/2025)") || new Date().toLocaleDateString();
+  const data =
+    prompt("Digite a data da contagem (ex: 05/08/2025)") ||
+    new Date().toLocaleDateString();
 
   try {
     await addDoc(collection(db, "contagens"), { nome, data, bois: boisPorCor });
-    alert("Contagem salva com sucesso!");
-
+    alert("✅ Contagem salva com sucesso!");
     boisPorCor = {};
     renderizarBois();
     atualizarTotalBois();
     localStorage.removeItem("contagemAtual");
   } catch (error) {
-    alert("Erro ao salvar no Firebase");
-    console.error(error);
+    console.error("Erro ao salvar no Firebase:", error);
+    alert(" Erro ao salvar no Firebase. Verifique as permissões.");
   }
 };
 
@@ -261,13 +297,8 @@ window.salvarContagem = async function () {
 // Inicialização
 // =======================
 window.onload = () => {
-  // NOVO: Chamar a função de autenticação assim que a página carregar
-  autenticarUsuario(); 
-
-  // O resto da sua função continua igual
   restaurarProgressoLocal();
-  document.getElementById("filter_color").addEventListener("change", renderizarBois);
-  
-  // A linha abaixo não é mais necessária, pois a cor já é selecionada por padrão
-  // atualizarCorSelecionada(corSelecionada); 
+  document
+    .getElementById("filter_color")
+    .addEventListener("change", renderizarBois);
 };

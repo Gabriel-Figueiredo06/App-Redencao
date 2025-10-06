@@ -14,7 +14,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCuryZes4w00TkIZGRpn6QYkcbAqXyB7Xk", // 🔥 substitua por sua nova API Key válida
+  apiKey: "AIzaSyCuryZes4w00TkIZGRpn6QYkcbAqXyB7Xk",
   authDomain: "fazenda-redencao-647ea.firebaseapp.com",
   projectId: "fazenda-redencao-647ea",
   storageBucket: "fazenda-redencao-647ea.appspot.com",
@@ -24,26 +24,29 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+
 // =======================
 // Autenticação Anônima (com retries e sem alert no boot)
 // =======================
 const auth = getAuth(app);
 
-// Tenta login anônimo com backoff exponencial (sem alert no carregamento)
 function loginAnonRetry(maxTentativas = 5) {
   let tentativa = 0;
   return new Promise((resolve, reject) => {
     const tentar = () => {
       signInAnonymously(auth)
-        .then(cred => {
+        .then((cred) => {
           console.log("✅ Login anônimo ok:", cred.user.uid);
           resolve(cred.user);
         })
-        .catch(err => {
+        .catch((err) => {
           tentativa++;
-          console.warn(`⚠️ Falha no login anônimo (tentativa ${tentativa}/${maxTentativas})`, err);
+          console.warn(
+            `⚠️ Falha no login anônimo (tentativa ${tentativa}/${maxTentativas})`,
+            err
+          );
           if (tentativa < maxTentativas) {
-            const atraso = 500 * Math.pow(2, tentativa - 1); // 500ms, 1s, 2s, 4s, 8s...
+            const atraso = 500 * Math.pow(2, tentativa - 1);
             setTimeout(tentar, atraso);
           } else {
             reject(err);
@@ -65,23 +68,27 @@ let authReady = new Promise((resolve, reject) => {
     }
   });
 
-  // dispara o fluxo de login (com retries); se esgotar, rejeita
-  loginAnonRetry().then(user => {
-    if (!resolvido) {
-      resolvido = true;
-      resolve(user);
-    }
-  }).catch(err => {
-    console.error("❌ Não foi possível autenticar após várias tentativas:", err);
-    // NÃO alertamos aqui para não incomodar no carregamento;
-    // o aviso será mostrado apenas se o usuário tentar SALVAR sem auth.
-    reject(err);
-  });
+  loginAnonRetry()
+    .then((user) => {
+      if (!resolvido) {
+        resolvido = true;
+        resolve(user);
+      }
+    })
+    .catch((err) => {
+      console.error(
+        "❌ Não foi possível autenticar após várias tentativas:",
+        err
+      );
+      reject(err);
+    });
 });
 
-// Apenas log informativo (sem alert)
-authReady.then(() => console.log("✅ Autenticação disponível"))
-         .catch(() => console.warn("Auth ainda não disponível (continuando em modo offline)…"));
+authReady
+  .then(() => console.log("✅ Autenticação disponível"))
+  .catch(() =>
+    console.warn("Auth ainda não disponível (continuando em modo offline)…")
+  );
 
 // =======================
 // Dados da contagem
@@ -109,10 +116,13 @@ function restaurarProgressoLocal() {
 // Seleção de cor
 // =======================
 function selecionarCor(botao) {
-  corSelecionada = botao.value;
+  // ★ Normaliza "S.B" -> "S/B" para casar com o restante do código
+  const val = (botao.value || "").trim();
+  corSelecionada = val === "S.B" ? "S/B" : val; // ★
+
   document.querySelectorAll(".btn-cor").forEach((btn) => {
     btn.classList.remove("selecionado");
-    if (btn.value === corSelecionada) btn.classList.add("selecionado");
+    if ((btn.value || "").trim() === val) btn.classList.add("selecionado");
   });
 }
 window.selecionarCor = selecionarCor;
@@ -130,6 +140,7 @@ window.Adicionar_animal = function () {
     return;
   }
 
+  // ★ Só exige número quando NÃO for S/B
   if (corSelecionada !== "S/B" && !num) {
     alert("Digite o número do boi.");
     return;
@@ -137,7 +148,7 @@ window.Adicionar_animal = function () {
 
   const novoBoi = {
     peso,
-    num: num || "S/B",
+    num: num || "S/B", // ★ se for S/B e sem número, registra "S/B"
     cor: corSelecionada,
     obs,
   };
@@ -193,12 +204,8 @@ function renderizarBois() {
         <strong>Nº ${boi.num}</strong> - ${boi.peso}kg - Cor: ${boi.cor} - 
         <span>Peso válido: ${pesoValido}kg</span><br>
         <span>Observação: ${boi.obs || "Nenhuma"}</span>
-        <button onclick="editarBoi(this, '${boi.num}', '${
-        boi.cor
-      }')">Editar</button>
-        <button onclick="removerBoi('${boi.num}', '${
-        boi.cor
-      }')">Remover</button>
+        <button onclick="editarBoi(this, '${boi.num}', '${boi.cor}')">Editar</button>
+        <button onclick="removerBoi('${boi.num}', '${boi.cor}')">Remover</button>
       `;
       lista.appendChild(div);
       pesoTotal += boi.peso;
@@ -226,9 +233,7 @@ window.editarBoi = function (botao, numero, cor) {
   div.innerHTML = `
     <input type="text" class="edit-num" value="${boi.num}" />
     <input type="number" class="edit-peso" value="${boi.peso}" />
-    <input type="text" class="edit-obs" value="${
-      boi.obs || ""
-    }" placeholder="Observação" />
+    <input type="text" class="edit-obs" value="${boi.obs || ""}" placeholder="Observação" />
     <select class="edit-cor">
       ${[
         "Amarelo",
@@ -244,9 +249,7 @@ window.editarBoi = function (botao, numero, cor) {
         .map((c) => `<option ${boi.cor === c ? "selected" : ""}>${c}</option>`)
         .join("")}
     </select>
-    <button onclick="salvarEdicao(this, '${boi.num}', '${
-    boi.cor
-  }')">Salvar</button>
+    <button onclick="salvarEdicao(this, '${boi.num}', '${boi.cor}')">Salvar</button>
     <button onclick="renderizarBois()">Cancelar</button>
   `;
 };
@@ -293,8 +296,17 @@ function atualizarTotalBois() {
   document.querySelector(".total_bois").innerText = `Total de bois: ${total}`;
 }
 
+// ★ Utilitário para formatar a entrada de data (só números -> DD/MM/AAAA)
+function formatarDataEntrada(str) {
+  if (!str) return str;
+  const d = str.replace(/\D/g, ""); // só dígitos
+  if (d.length === 8) return d.replace(/(\d{2})(\d{2})(\d{4})/, "$1/$2/$3");
+  return str;
+}
+
 window.salvarContagem = async function () {
-  await authReady; // ✅ Garante que está autenticado
+  await authReady; // Garante que está autenticado
+
   if (Object.keys(boisPorCor).length === 0) {
     alert("Nenhum boi foi adicionado para salvar.");
     return;
@@ -303,13 +315,21 @@ window.salvarContagem = async function () {
   const nome = prompt("Digite o nome da contagem:");
   if (!nome) return;
 
-  const data =
-    prompt("Digite a data da contagem (ex: 05/08/2025)") ||
-    new Date().toLocaleDateString();
+  // ★ Prompt já com barras; se digitar só números, eu formato.
+  let dataEntrada =
+    prompt("Digite a data da contagem (DD/MM/AAAA):", "  /  /    ") || "";
+  dataEntrada = formatarDataEntrada(dataEntrada);
+  if (!dataEntrada || dataEntrada === "  / / ") {
+    dataEntrada = new Date().toLocaleDateString("pt-BR");
+  }
 
   try {
-    await addDoc(collection(db, "contagens"), { nome, data, bois: boisPorCor });
-    alert("✅ Contagem salva com sucesso!");
+    await addDoc(collection(db, "contagens"), {
+      nome,
+      data: dataEntrada, //  gravando a data formatada
+      bois: boisPorCor,
+    });
+    alert(" Contagem salva com sucesso!");
     boisPorCor = {};
     renderizarBois();
     atualizarTotalBois();

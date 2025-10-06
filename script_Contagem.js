@@ -24,37 +24,64 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+// =======================
+// Autenticação Anônima (com retries e sem alert no boot)
+// =======================
 const auth = getAuth(app);
 
-// =======================
-// Autenticação Anônima
-// =======================
-let authReady = new Promise((resolve, reject) => {
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      console.log("✅ Usuário autenticado:", user.uid);
-      resolve(user);
-    } else {
-      console.log("🔄 Tentando login anônimo...");
+// Tenta login anônimo com backoff exponencial (sem alert no carregamento)
+function loginAnonRetry(maxTentativas = 5) {
+  let tentativa = 0;
+  return new Promise((resolve, reject) => {
+    const tentar = () => {
       signInAnonymously(auth)
-        .then((result) => {
-          console.log("✅ Login anônimo realizado:", result.user.uid);
-          resolve(result.user);
+        .then(cred => {
+          console.log("✅ Login anônimo ok:", cred.user.uid);
+          resolve(cred.user);
         })
-        .catch((error) => {
-          console.error("❌ Erro ao autenticar:", error);
-          alert(
-            "Não foi possível autenticar no Firebase.\nVerifique se o login ANÔNIMO está habilitado e se o domínio está autorizado no Firebase."
-          );
-          reject(error);
+        .catch(err => {
+          tentativa++;
+          console.warn(`⚠️ Falha no login anônimo (tentativa ${tentativa}/${maxTentativas})`, err);
+          if (tentativa < maxTentativas) {
+            const atraso = 500 * Math.pow(2, tentativa - 1); // 500ms, 1s, 2s, 4s, 8s...
+            setTimeout(tentar, atraso);
+          } else {
+            reject(err);
+          }
         });
+    };
+    tentar();
+  });
+}
+
+let authReady = new Promise((resolve, reject) => {
+  let resolvido = false;
+
+  onAuthStateChanged(auth, (user) => {
+    if (user && !resolvido) {
+      resolvido = true;
+      console.log("🔥 Auth pronta (onAuthStateChanged):", user.uid);
+      resolve(user);
     }
+  });
+
+  // dispara o fluxo de login (com retries); se esgotar, rejeita
+  loginAnonRetry().then(user => {
+    if (!resolvido) {
+      resolvido = true;
+      resolve(user);
+    }
+  }).catch(err => {
+    console.error("❌ Não foi possível autenticar após várias tentativas:", err);
+    // NÃO alertamos aqui para não incomodar no carregamento;
+    // o aviso será mostrado apenas se o usuário tentar SALVAR sem auth.
+    reject(err);
   });
 });
 
-authReady
-  .then(() => console.log("🔥 Autenticação pronta"))
-  .catch((err) => console.error("Erro no authReady:", err));
+// Apenas log informativo (sem alert)
+authReady.then(() => console.log("✅ Autenticação disponível"))
+         .catch(() => console.warn("Auth ainda não disponível (continuando em modo offline)…"));
 
 // =======================
 // Dados da contagem

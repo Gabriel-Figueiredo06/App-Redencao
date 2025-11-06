@@ -3,14 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>Detalhes</title>
   <link rel="stylesheet" href="style.details.css">
 </head>
 <body>
   <a href="historico.html" class="btn-voltar"><img src="img_fazenda/Seta-branca.png" alt=""></a>
   <h1 id="titulo-contagem">Detalhes da Contagem</h1>
+
   <div id="conteudo"></div>
+
+  <!-- Campo para calcular o valor (R$) com base no Peso Válido -->
+  <div id="preco-wrapper" style="margin:16px 12px 0 12px;">
+    <label for="precoKg" style="font-weight:600;">Preço por Kg (R$):</label>
+    <input id="precoKg" type="number" step="0.01" min="0" placeholder="Ex: 12.50" style="margin-left:8px;padding:6px 8px;">
+  </div>
+
+  <!-- Resumo por cor aparece aqui (no final da página) -->
+  <div id="resumo" style="margin:12px;"></div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
@@ -30,6 +39,9 @@
     const params = new URLSearchParams(window.location.search);
     const id = params.get("id");
 
+    // memória do documento atual para recalcular o resumo ao mudar o preço
+    let dadosContagem = null;
+
     async function carregar() {
       if (!id) {
         document.getElementById("conteudo").innerHTML = "<p>Contagem não encontrada.</p>";
@@ -45,12 +57,14 @@
       }
 
       const c = docSnap.data();
+      dadosContagem = c; // guarda para o resumo
 
       // Atualiza título
       document.getElementById("titulo-contagem").textContent = c.nome;
 
       let html = `<div class="info-geral">Data: ${c.data}</div>`;
 
+      // Lista por cor (como já estava)
       for (const cor in c.bois) {
         html += `<div class="grupo-cor"><strong>Cor: ${cor}</strong>`;
         c.bois[cor].forEach(boi => {
@@ -61,7 +75,48 @@
       }
 
       document.getElementById("conteudo").innerHTML = html;
+
+      // desenha o resumo inicial (preço 0)
+      desenharResumo();
     }
+
+    // Calcula e desenha o resumo por cor no final da página
+    function desenharResumo() {
+      if (!dadosContagem) return;
+
+      const preco = parseFloat(document.getElementById("precoKg").value) || 0;
+
+      // Monta linhas de resumo por cor
+      let resumoHTML = `
+        <div class="grupo-cor" style="margin-top:12px;">
+          <strong>Resumo por cor</strong>
+      `;
+
+      for (const cor in dadosContagem.bois) {
+        const arr = dadosContagem.bois[cor];
+        const qtd = arr.length;
+        const pesoTotal = arr.reduce((s, b) => s + (parseFloat(b.peso) || 0), 0);
+        const pesoMedio = qtd ? (pesoTotal / qtd) : 0;
+        const pesoValidoTotal = arr.reduce((s, b) => s + ((parseFloat(b.peso) || 0) / 2), 0);
+        const valorTotal = pesoValidoTotal * preco;
+
+        resumoHTML += `
+          <div class="boi-item">
+            <strong>Cor: ${cor}</strong><br>
+            Quantidade: ${qtd}<br>
+            Peso total: ${pesoTotal.toFixed(2)} kg<br>
+            Peso médio: ${pesoMedio.toFixed(2)} kg<br>
+            Valor (Peso válido × R$ ${preco.toFixed(2)}): <strong>R$ ${valorTotal.toFixed(2)}</strong>
+          </div>
+        `;
+      }
+
+      resumoHTML += `</div>`;
+      document.getElementById("resumo").innerHTML = resumoHTML;
+    }
+
+    // Recalcula o resumo quando o usuário informa o preço por kg
+    document.getElementById("precoKg").addEventListener("input", desenharResumo);
 
     carregar();
   </script>

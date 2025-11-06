@@ -52,9 +52,51 @@ h1 {
   margin-top: -10px;
 }
 
+#preco-wrapper {
+  margin: 20px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+#preco-wrapper label {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #ffffff;
+  font-family: "Rose";
+}
+
+#precoKg {
+  width: 50%;
+  padding: 10px 14px;
+  font-size: 1.1rem;
+  border: 2px solid #ffffff44;
+  border-radius: 12px;
+  background: #202020;
+  color: #fff;
+  transition: all .25s ease;
+  outline: none;
+}
+
+/* Remove setas do input number */
+#precoKg::-webkit-inner-spin-button,
+#precoKg::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+
+#precoKg:focus {
+  border-color: #FCA311;
+  box-shadow: 0 0 4px #FCA311;
+  background: #1a1a1a;
+}
+
+
 @media (max-width: 410px){
   h1{
     font-size: 28pt;
   }
 
 }
+
